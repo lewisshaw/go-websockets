@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Chat Example</title>
+<script type="text/javascript">
+function startTimer() {
+    fetch('http://' + document.location.host + '/timer/start');
+}
+window.onload = function () {
+    var conn;
+    var msg = document.getElementById("msg");
+    var log = document.getElementById("log");
+
+    if (window["WebSocket"]) {
+        conn = new WebSocket("ws://" + document.location.host + "/ws");
+        conn.onclose = function (evt) {
+            console.log("Closed");
+        };
+        conn.onmessage = function (evt) {
+            document.getElementById("time").innerHTML = evt.data;
+        };
+    } else {
+        var item = document.createElement("div");
+        item.innerHTML = "<b>Your browser does not support WebSockets.</b>";
+        appendLog(item);
+    }
+};
+</script>
+</head>
+<body>
+    <button onclick="startTimer()">Start Timer</button>
+    <div id="time">0</div>
+</body>
+</html>
